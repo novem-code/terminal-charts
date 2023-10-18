@@ -38,6 +38,6 @@ novem share_comp -C -t line -x --fs
 ![img/map.png](img/map.png)
 
 ```bash
-./get_flights.sh 2023-01-01 2023-03-31 | \
+./get_flights.sh N887WM 2023-01-01 2023-03-31 | \
 novem -p flights -C -t map -x --fs
 ```
