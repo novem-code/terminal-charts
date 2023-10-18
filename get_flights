@@ -1,0 +1,49 @@
+#!/bin/bash
+
+plane="ac39d6" # gates || N887WM
+
+# Function to convert date to Unix timestamp
+convert_to_seconds() {
+    local date_str="$1"
+
+    # Check if the date command supports the -d option (GNU/Linux version)
+    if date -d "$date_str" +%s &>/dev/null; then
+        date -d "$date_str" +%s
+    else
+        # If not, use the BSD/macOS version
+        date -jf "%Y-%m-%d" "$date_str" +%s
+    fi
+}
+
+# If no arguments are provided, set the start date to 30 days ago and the end date to today
+if [ "$#" -eq 0 ]; then
+    if date --version &>/dev/null; then  # Check for GNU date
+        start_date=$(date -d "-30 days" +"%Y-%m-%d")
+    else  # Assuming BSD date
+        start_date=$(date -v-30d +"%Y-%m-%d")
+    fi
+    end_date=$(date +"%Y-%m-%d")
+elif [ "$#" -eq 1 ]; then
+    start_date="$1"
+    end_date=$(date +"%Y-%m-%d")
+else
+    start_date="$1"
+    end_date="$2"
+fi
+
+start=$(convert_to_seconds "$start_date")
+end=$(convert_to_seconds "$end_date")
+
+q="https://opensky-network.org/api/flights/aircraft?icao24=$plane&begin=$start&end=$end"
+
+#echo "$start_date => $end_date"
+#echo $q
+# Silently fetch the data from the URL and store in the 'response' variable
+response=$(curl -s "$q" 2>/dev/null)
+#echo $response
+
+#echo "$response"
+# If you want to do something with the response, add here. For now, we'll just echo it.
+echo "$response" | jq -r '[.[] | .estDepartureAirport, .estArrivalAirport] | join("->")'  | sed -E 's/(->)+/->/g' | sed "s/^/$plane,/"
+
+
