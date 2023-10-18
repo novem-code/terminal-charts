@@ -20,7 +20,9 @@ This folder contains two scripts, `ts` and `get_flights`.
 ![img/bar.png](img/bar.png)
 
 ```bash
-curl -s https://data.novem.no/v1/examples/plot/state_pop.csv | head -n 7 | novem state_pop -C -t gbar -x --fs
+curl -s https://data.novem.no/v1/examples/plot/state_pop.csv | \
+head -n 7 | \
+novem state_pop -C -t gbar -x --fs
 ```
 
 
@@ -28,12 +30,14 @@ curl -s https://data.novem.no/v1/examples/plot/state_pop.csv | head -n 7 | novem
 ![img/line.png](img/line.png)
 
 ```bash
-./ts MSFT AAPL GOOG -i 0 | novem share_comp -C -t line -x --fs
+./ts MSFT AAPL GOOG -i 0 | \
+novem share_comp -C -t line -x --fs
 ```
 
 ## Creating a map chart
 ![img/map.png](img/map.png)
 
 ```bash
-./get_flights.sh 2023-01-01 2023-03-31 | novem -p flights -C -t map -x --fs
+./get_flights.sh 2023-01-01 2023-03-31 | \
+novem -p flights -C -t map -x --fs
 ```
